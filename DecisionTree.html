@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>决策树 &#8212; Sklearn Example</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DecisionTree';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Scikit-learn Examples" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Scikit-learn Examples
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">决策树</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDecisionTree.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/DecisionTree.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>决策树</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">决策树回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">树的可视化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">剪枝</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">后剪枝</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">前剪枝</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>决策树<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>本文是从scikit-learn官网中, 介绍决策树的相关文档整合而来.</p>
+<p>Reference:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/tree.html">Decision Tree</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/auto_examples/index.html#decision-trees">Example of Decision Tree</a></p></li>
+</ul>
+<p>本文中用到的库导入如下.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span><span class="p">,</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># set seed</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span> <span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>  <span class="c1"># set print format</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id2">
+<h2>决策树回归<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>决策树最初为分类模型而设计, 但是它也可以用于回归. 用于回归任务时, 每一个叶子节点上取一样的值, 这决定了决策树回归得到的是分段线性函数.</p>
+<p>下面以单变量回归问题为例, 简要说明决策树回归的过程. 先如图所示, 生成数据
+$<span class="math notranslate nohighlight">\(
+y = \sin(x) + \sin(\frac{10x}{3})+\varepsilon.
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x1d6b4336520&gt;
+</pre></div>
+</div>
+<img alt="_images/ae7c7174e43be324a5511f986c7bf9655aaaf776189215a87a67ffa44006d459.png" src="_images/ae7c7174e43be324a5511f986c7bf9655aaaf776189215a87a67ffa44006d459.png" />
+</div>
+</div>
+<p>下面给出了一个用五层决策树回归拟合数据的模型, 它大致捕捉了数据的变化特征. 可以明显地看出, 它是分段线性的, 并且每一段上是常数取值(除分界外).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">pred_y</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_input</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pred_y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DT of 5 depths&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Decision Tree Regression&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/fb7c8d6fa859692b8b7e0091d6e256de2e930bdc9026702cfdac4e22b2e26226.png" src="_images/fb7c8d6fa859692b8b7e0091d6e256de2e930bdc9026702cfdac4e22b2e26226.png" />
+</div>
+</div>
+<p>通过调整<code class="docutils literal notranslate"><span class="pre">max_depth</span></code>参数, 观察决策树是怎样一层一层生长的. 每加深一层, 原本层的一个水平分段就会被分成一个”阶梯”, 从而慢慢地得到一个分段线性函数.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">last_clf</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">pred_y</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_input</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pred_y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">:</span>
+        <span class="n">last_pred_y</span> <span class="o">=</span> <span class="n">last_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_input</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">last_pred_y</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;DT of </span><span class="si">{}</span><span class="s1"> depth(s).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">last_clf</span> <span class="o">=</span> <span class="n">clf</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c8ed67257d3b2b3051597d3a796f746a45ac2b4ad9f45413a910d85918119091.png" src="_images/c8ed67257d3b2b3051597d3a796f746a45ac2b4ad9f45413a910d85918119091.png" />
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>树的可视化<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>先创建一个异或分类数据集.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]]</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">mean</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pos_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">neg_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">pos_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">pos_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">neg_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">neg_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9fbf648de872e7ef13e0ff941286007ba383b7d75b631f8312250bbe087f621e.png" src="_images/9fbf648de872e7ef13e0ff941286007ba383b7d75b631f8312250bbe087f621e.png" />
+</div>
+</div>
+<p>用决策树构造一个分类器, 选择最大深度为3.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.555
+</pre></div>
+</div>
+</div>
+</div>
+<p>由于分类问题定义在二维空间上, 可以绘制其决策边界. 浅层决策树在异或问题上的表现很差. 这是因为它难以找到第一次分叉的阈值.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">y_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">x_</span><span class="p">,</span> <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">)</span>
+<span class="n">grid_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
+<span class="n">grid_output</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">grid_input</span><span class="p">)</span>
+
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">([</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C0&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">grid_output</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x_</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">pos_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">pos_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">neg_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">neg_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/096d06eb222d013316a8fb81f30b55ebebd5dd2cfb0b229c274f42d747648ea1.png" src="_images/096d06eb222d013316a8fb81f30b55ebebd5dd2cfb0b229c274f42d747648ea1.png" />
+</div>
+</div>
+<p>对维度更多的分类数据集, 决策边界难以绘制, 但可以用树形结构直观地表示.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ff2979ffe00ec594df70c1336383ece744e9e9e5a9a8ba85286b277cd0e463b8.png" src="_images/ff2979ffe00ec594df70c1336383ece744e9e9e5a9a8ba85286b277cd0e463b8.png" />
+</div>
+</div>
+<p>通过分类器的<code class="docutils literal notranslate"><span class="pre">tree_</span></code>属性, 可以更全面地输出决策树的结构信息. 此属性是<code class="docutils literal notranslate"><span class="pre">Tree</span></code>实例, 它是决策树的二叉树组表示, 下面是与决策树结构相关的主要属性, 其中以数组索引形式表示的属性本身是一个数组, 数组的每一个索引代表列表值.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">node_count</span></code>: 节点数.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_depth</span></code>: 最大深度.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">children_left[i]</span></code>: 节点 <span class="math notranslate nohighlight">\(i\)</span> 的左孩子.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">children_right[i]</span></code>: 节点 <span class="math notranslate nohighlight">\(i\)</span> 的右孩子.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature[i]</span></code>: 节点 <span class="math notranslate nohighlight">\(i\)</span> 用于分类的特征.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">threshold[i]</span></code>: 节点 <span class="math notranslate nohighlight">\(i\)</span> 用于分类的阈值. 定义左孩子为<code class="docutils literal notranslate"><span class="pre">feature[i]</span> <span class="pre">&lt;=</span> <span class="pre">threshold[i]</span></code>的节点, 右孩子为<code class="docutils literal notranslate"><span class="pre">feature[i]</span> <span class="pre">&gt;</span> <span class="pre">threshold[i]</span></code>的节点.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value[i],</span> <span class="pre">impurity[i]</span></code>: 节点 <span class="math notranslate nohighlight">\(i\)</span> 的分类结果与杂质程度.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">tree_</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of nodes: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">node_count</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max depths: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">max_depth</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Left Children: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">children_left</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Right Children: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">children_right</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;feature: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">feature</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;threshold: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">threshold</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of nodes: 11
+Max depths: 3
+Left Children: [ 1  2  3 -1 -1  6 -1 -1  9 -1 -1]
+Right Children: [ 8  5  4 -1 -1  7 -1 -1 10 -1 -1]
+feature: [ 1  1  0 -2 -2  1 -2 -2  0 -2 -2]
+threshold: [ 3.205 -3.237 -0.466 -2.    -2.    -3.144 -2.    -2.    -0.233 -2.    -2.   ]
+</pre></div>
+</div>
+</div>
+</div>
+<p>上面的代码给出了决策树结构的相关具体值, 下面的代码递归地给出了决策树的直观结构.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_tree_struct</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">wrong</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;print the structure of given DT.&quot;&quot;&quot;</span>
+    <span class="n">pre_wrong</span> <span class="o">=</span> <span class="n">wrong</span>
+    
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Begin Visualize DT:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">condition</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">level</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">condition</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="n">level</span> <span class="o">+</span> <span class="s1">&#39;Node: </span><span class="si">{}</span><span class="s1">, Level: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="n">level</span> <span class="o">+</span> <span class="s1">&#39;Classification result: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">node</span><span class="p">]))</span>
+    
+    <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># not leaf</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="n">level</span> <span class="o">+</span> <span class="s1">&#39;Feature: x[</span><span class="si">{}</span><span class="s1">], Threshold: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">tree</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="n">node</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrong</span> <span class="o">+=</span> <span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">node</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">wrong</span>
+    
+    <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">children_left</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">20</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">level</span><span class="p">))</span>
+        <span class="n">cond_left</span> <span class="o">=</span> <span class="s1">&#39;If x[</span><span class="si">{}</span><span class="s1">] &lt; </span><span class="si">{:.3f}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">tree</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+        <span class="n">wrong</span> <span class="o">+=</span> <span class="n">print_tree_struct</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">children_left</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cond_left</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">pre_wrong</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">children_right</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="n">cond_right</span> <span class="o">=</span> <span class="s1">&#39;If x[</span><span class="si">{}</span><span class="s1">] &lt; </span><span class="si">{:.3f}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">tree</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+        <span class="n">wrong</span> <span class="o">+=</span> <span class="n">print_tree_struct</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">children_right</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cond_right</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">pre_wrong</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total wrong: </span><span class="si">{}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">Misclassification Rate: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wrong</span><span class="p">,</span> <span class="n">wrong</span> <span class="o">/</span> <span class="n">tree</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="n">wrong</span>
+
+<span class="n">wrong</span> <span class="o">=</span> <span class="n">print_tree_struct</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Begin Visualize DT:
+
+Node: 0, Level: 0
+Classification result: [[200. 200.]]
+Feature: x[1], Threshold: 3.205
+--------------------
+If x[1] &lt; 3.205:
+	Node: 1, Level: 1
+	Classification result: [[191. 197.]]
+	Feature: x[1], Threshold: -3.237
+----------------------------
+	If x[1] &lt; -3.237:
+		Node: 2, Level: 2
+		Classification result: [[13.  7.]]
+		Feature: x[0], Threshold: -0.466
+------------------------------------
+		If x[0] &lt; -0.466:
+			Node: 3, Level: 3
+			Classification result: [[0. 7.]]
+
+		If x[0] &lt; -0.466:
+			Node: 4, Level: 3
+			Classification result: [[13.  0.]]
+
+	If x[1] &lt; -3.237:
+		Node: 5, Level: 2
+		Classification result: [[178. 190.]]
+		Feature: x[1], Threshold: -3.144
+------------------------------------
+		If x[1] &lt; -3.144:
+			Node: 6, Level: 3
+			Classification result: [[0. 3.]]
+
+		If x[1] &lt; -3.144:
+			Node: 7, Level: 3
+			Classification result: [[178. 187.]]
+
+If x[1] &lt; 3.205:
+	Node: 8, Level: 1
+	Classification result: [[9. 3.]]
+	Feature: x[0], Threshold: -0.233
+----------------------------
+	If x[0] &lt; -0.233:
+		Node: 9, Level: 2
+		Classification result: [[9. 0.]]
+
+	If x[0] &lt; -0.233:
+		Node: 10, Level: 2
+		Classification result: [[0. 3.]]
+--------------------------------------------------------------------------------
+Total wrong: 178.0,
+Misclassification Rate: 0.445.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id4">
+<h2>剪枝<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<section id="id5">
+<h3>后剪枝<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<p>对决策树 <span class="math notranslate nohighlight">\(T\)</span>, 定义其总误分率为 <span class="math notranslate nohighlight">\(R(T)\)</span>, 那么决定是否剪枝的成本复杂度度量 <span class="math notranslate nohighlight">\(R_\alpha(T)\)</span> 定义为</p>
+<div class="math notranslate nohighlight">
+\[
+R_\alpha(T) = R(T) + \alpha|\tilde{T}|,
+\]</div>
+<p>其中, <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> 是预先设定的复杂度超参数, <span class="math notranslate nohighlight">\(|\tilde{T}|\)</span> 是决策树 <span class="math notranslate nohighlight">\(T\)</span> 所含的终端节点数量.</p>
+<p>对单个节点 <span class="math notranslate nohighlight">\(t\)</span>, 定义其成本复杂度为 <span class="math notranslate nohighlight">\(R_\alpha(t)=R(t)+\alpha\)</span>. 定义 <span class="math notranslate nohighlight">\(T_t\)</span> 为以 <span class="math notranslate nohighlight">\(t\)</span> 为根节点的子决策树, 一般成立</p>
+<div class="math notranslate nohighlight">
+\[
+R(T_t) &lt; R(t),
+\]</div>
+<p>这意味着继续分割一般总能提高决策树在训练集上的准确率. 但是选择合适的超参数值 <span class="math notranslate nohighlight">\(\alpha\)</span> 能使得</p>
+<div class="math notranslate nohighlight">
+\[
+R_\alpha(T_t) = R_\alpha(t) \implies \alpha = \frac{R(t)-R(T_t)}{|\tilde{T}_t|-1},
+\]</div>
+<p>将此 <span class="math notranslate nohighlight">\(\alpha\)</span> 定义为节点 <span class="math notranslate nohighlight">\(t\)</span> 的有效 <span class="math notranslate nohighlight">\(\alpha\)</span>, 记作 <span class="math notranslate nohighlight">\(\alpha_\text{eff}(t)\)</span>. 在决策树中, 通过设定<code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code>值剪枝, 如果存在 <span class="math notranslate nohighlight">\(t\)</span> 使得 <span class="math notranslate nohighlight">\(\alpha_\text{eff}(t)\)</span> 不大于<code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code>, 就将此枝剪下.</p>
+<p><code class="docutils literal notranslate"><span class="pre">load_breast_cancer()</span></code>函数加载一个二分类数据集. 在下面的代码中, 通过调整<code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code>的值, 观察训练集和测试集准确率的变化.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">train_acc</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_acc</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ccp_alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ccp_alpha</span> <span class="ow">in</span> <span class="n">ccp_alphas</span><span class="p">:</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">ccp_alpha</span><span class="o">=</span><span class="n">ccp_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">train_acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+    <span class="n">test_acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">train_acc</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;train_acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">test_acc</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;test_acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ccp_alpha&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/da56e62cd9cc99033b0fb48832d4f26ebae11c8406e5c59faaad9945b591fc7f.png" src="_images/da56e62cd9cc99033b0fb48832d4f26ebae11c8406e5c59faaad9945b591fc7f.png" />
+</div>
+</div>
+</section>
+<section id="id6">
+<h3>前剪枝<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>后剪枝是对树完全生长后进行剪枝, 也可以选择在树的生长过程中进行剪枝, 即前剪枝.</p>
+<p>在决策树中, <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>, <code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>, <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>可用于控制前剪枝, 它们的作用分别如下:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">max_depth</span></code>: 指定树的最大深度. 如果设置为<code class="docutils literal notranslate"><span class="pre">None</span></code>且没有其他前剪枝准则, 则生长到所有叶子都是纯的为止.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>: 指定拆分内部节点所需的最小样本数. 可以设置为<code class="docutils literal notranslate"><span class="pre">int</span></code>型或<code class="docutils literal notranslate"><span class="pre">float</span></code>型. 如果设置为<code class="docutils literal notranslate"><span class="pre">float</span></code>型, 则被视为分数, 此时<code class="docutils literal notranslate"><span class="pre">min_samples_split=ceil(min_samples_split</span> <span class="pre">*</span> <span class="pre">n_samples)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>: 指定叶子节点所需的最小样本数.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mix_impurity_decrease</span></code>: 只有节点的杂质减少大于这个值, 节点才会被分割. 杂质的减少定义为
+$<span class="math notranslate nohighlight">\(
+\frac{N_t}{N}\left(\text{Impurity}-\frac{N_t^R}{N_t}\text{Impurity}^R-\frac{N_t^L}{N_t}\text{LeftImpurity}^L \right).
+\)</span><span class="math notranslate nohighlight">\(
+其中 \)</span>N<span class="math notranslate nohighlight">\( 是总样本量, \)</span>N_t<span class="math notranslate nohighlight">\( 是节点 \)</span>t$ 中的样本量.</p></li>
+</ul>
+<p>关于<code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>和<code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>的区别, 主要在于<code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>的分割需要保证两个子节点都至少有一定的样本数量, 而<code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>只需要保证有至少一个子节点有一定的样本数量.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Scikit-learn Examples</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">决策树回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">树的可视化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">剪枝</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">后剪枝</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">前剪枝</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Hao Jiang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
