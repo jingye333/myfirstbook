@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>从零开始的sklearn学习纲要 &#8212; Sklearn Example</title>
+    <title>1. 线性回归 &#8212; Sklearn Example</title>
   
   
   
@@ -60,10 +60,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Chap_1';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. 线性回归" href="Chap_1.html" />
+    <link rel="next" title="1.1. 线性回归的基本形式" href="Chap_1_Sec_1.html" />
+    <link rel="prev" title="从零开始的sklearn学习纲要" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -129,7 +130,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="sidebar-primary-item">
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -148,14 +149,14 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     从零开始的sklearn学习纲要
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="Chap_1.html">1. 线性回归</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">1. 线性回归</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_1.html">1.1. 线性回归的基本形式</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_2.html">1.2. 线性回归的压缩估计</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_3.html">1.3. 稳健线性回归</a></li>
@@ -232,7 +233,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FChap_1.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -262,7 +263,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/Chap_1.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -272,7 +273,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -331,9 +332,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -344,21 +343,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>从零开始的sklearn学习纲要</h1>
+    <h1>线性回归</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">前言</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">安装</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -368,30 +357,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="sklearn">
-<h1>从零开始的sklearn学习纲要<a class="headerlink" href="#sklearn" title="Permalink to this headline">#</a></h1>
-<section id="id1">
-<h2>前言<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
-<p>Scikit-Learn(sklearn)是一个开源的机器学习库, 包含了机器学习的许多主流算法, 支持机器学习所需的全部功能, 包括数据预处理, 模型拟合, 模型选择与评估, 特征评估等, 是学习机器学习最好的工具. 欲学习sklearn库, 其官方文档无疑是最好的材料, 然而使用官方文档学习有两个障碍: 一是官方文档使用英文, 对中文环境下的初学者有阅读与术语关联上的困扰, 不过<a class="reference external" href="https://scikit-learn.org.cn/">sklearn中文社区</a>提供了相关的语言支持; 二是官方网站功能繁复, 初学者会感到难以入手.</p>
-<p>官方文档中给出了sklearn全面而有效的学习指南, 包括机器学习入门教程, 用户指南, 使用示例以及所有函数的说明和源码. 对于想要精通机器学习的学习者, 应当使用官方文档进行学习. 不过, 官方文档中的示例难免有一些艰深繁杂的部分, 本书欲提供一个相对系统的学习提纲, 覆盖主流机器学习算法, 并对sklearn库的组织形式有一定的探究.</p>
-<p>使用sklearn搭建机器学习框架须遵循一定的代码风格, 即开发者希望用户如何使用此工具. 不幸的是, 大多接触机器学习的新手一般先从理论学习开始, 脱离代码锻炼; 一旦想要把理论与实际结合, 就要从网上东拼西凑各个代码碎块, 写出的代码即使能完成所需的功能, 也很难维护和二次修改.</p>
-<p>笔者深受这种学习方式的毒害, 因此本书的书写, 一部分是希望后来者对sklearn有正确的认识, 另一部分也是希望加深自己对sklearn的理解, 在写代码时能够精确地捕捉需求.</p>
-</section>
-<section id="id2">
-<h2>安装<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
-<p>使用<code class="docutils literal notranslate"><span class="pre">pip</span></code>或<code class="docutils literal notranslate"><span class="pre">conda</span></code>安装sklearn库, 具体可遵循<a class="reference external" href="https://scikit-learn.org/dev/install.html">安装示例</a>.</p>
-<p>以<code class="docutils literal notranslate"><span class="pre">pip</span></code>安装为例, 若是Windows系统, 则按<code class="docutils literal notranslate"><span class="pre">Win</span></code>和<code class="docutils literal notranslate"><span class="pre">R</span></code>呼出系统运行窗口, 输入<code class="docutils literal notranslate"><span class="pre">cmd</span></code>进入控制台命令窗口. 输入</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install -U scikit-learn
-</pre></div>
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1><a class="toc-backref" href="#id2"><span class="section-number">1. </span>线性回归</a><a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>任何机器学习或统计学习相关教材几乎都以线性回归作为实例的第一章, 因为它与其他学科的联系紧密, 且推导简单, 易于理解. 本章介绍线性回归, 以及线性回归如何在sklearn中实现, 还介绍线性回归的一些变体.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id2">线性回归</a></p></li>
+</ul>
 </div>
-<p>稍等片刻即可完成安装.</p>
-<p>为避免和其他软件包产生冲突, 可以使用虚拟环境或<code class="docutils literal notranslate"><span class="pre">conda</span></code>环境, 具体在此不再赘述. 安装完sklearn后, 相关的依赖库如NumPy, SciPy等也会伴随安装.</p>
-</section>
-<section id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">#</a></h2>
-<p>[1] <a class="reference external" href="https://scikit-learn.org/dev/getting_started.html">https://scikit-learn.org/dev/getting_started.html</a></p>
-<p>[2] <a class="reference external" href="https://scikit-learn.org.cn/">https://scikit-learn.org.cn/</a></p>
-</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -424,12 +398,21 @@ document.write(`
                 <footer class="bd-footer-article">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">从零开始的sklearn学习纲要</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="Chap_1.html"
+       href="Chap_1_Sec_1.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>线性回归</p>
+        <p class="prev-next-title"><span class="section-number">1.1. </span>线性回归的基本形式</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -439,22 +422,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">前言</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">安装</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

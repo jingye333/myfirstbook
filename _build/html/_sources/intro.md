@@ -1,7 +1,33 @@
-# Scikit-learn Examples 
+# 从零开始的sklearn学习纲要
 
 
 
-It's my first Jupyter book based on a template.
+## 前言
 
-This book contains some examples from examples of scikit-learn. I select some and add my personal trial, in order to strengthen my understanding of applying machine learning to practical use. And I translate it into Chinese.
+Scikit-Learn(sklearn)是一个开源的机器学习库, 包含了机器学习的许多主流算法, 支持机器学习所需的全部功能, 包括数据预处理, 模型拟合, 模型选择与评估, 特征评估等, 是学习机器学习最好的工具. 欲学习sklearn库, 其官方文档无疑是最好的材料, 然而使用官方文档学习有两个障碍: 一是官方文档使用英文, 对中文环境下的初学者有阅读与术语关联上的困扰, 不过[sklearn中文社区](https://scikit-learn.org.cn/)提供了相关的语言支持; 二是官方网站功能繁复, 初学者会感到难以入手.
+
+官方文档中给出了sklearn全面而有效的学习指南, 包括机器学习入门教程, 用户指南, 使用示例以及所有函数的说明和源码. 对于想要精通机器学习的学习者, 应当使用官方文档进行学习. 不过, 官方文档中的示例难免有一些艰深繁杂的部分, 本书欲提供一个相对系统的学习提纲, 覆盖主流机器学习算法, 并对sklearn库的组织形式有一定的探究.
+
+使用sklearn搭建机器学习框架须遵循一定的代码风格, 即开发者希望用户如何使用此工具. 不幸的是, 大多接触机器学习的新手一般先从理论学习开始, 脱离代码锻炼; 一旦想要把理论与实际结合, 就要从网上东拼西凑各个代码碎块, 写出的代码即使能完成所需的功能, 也很难维护和二次修改. 
+
+笔者深受这种学习方式的毒害, 因此本书的书写, 一部分是希望后来者对sklearn有正确的认识, 另一部分也是希望加深自己对sklearn的理解, 在写代码时能够精确地捕捉需求.
+
+## 安装
+
+使用`pip`或`conda`安装sklearn库, 具体可遵循[安装示例](https://scikit-learn.org/dev/install.html). 
+
+以`pip`安装为例, 若是Windows系统, 则按`Win`和`R`呼出系统运行窗口, 输入`cmd`进入控制台命令窗口. 输入
+
+```
+$ pip install -U scikit-learn
+```
+
+稍等片刻即可完成安装. 
+
+为避免和其他软件包产生冲突, 可以使用虚拟环境或`conda`环境, 具体在此不再赘述. 安装完sklearn后, 相关的依赖库如NumPy, SciPy等也会伴随安装.
+
+## Reference
+
+[1] https://scikit-learn.org/dev/getting_started.html
+
+[2] https://scikit-learn.org.cn/

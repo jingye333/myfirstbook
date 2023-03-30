@@ -3,5 +3,12 @@
 
 format: jb-book
 root: intro
+options: 
+  numbered: true
 chapters:
-- file: DecisionTree
+- file: Chap_1
+  sections:
+  - file: Chap_1_Sec_1
+  - file: Chap_1_Sec_2
+  - file: Chap_1_Sec_3
+  
