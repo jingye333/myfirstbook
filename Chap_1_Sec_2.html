@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.2. 线性回归的压缩估计 &#8212; Sklearn Example</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Chap_1_Sec_2';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.3. 稳健线性回归" href="Chap_1_Sec_3.html" />
+    <link rel="prev" title="1.1. 线性回归的基本形式" href="Chap_1_Sec_1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    从零开始的sklearn学习纲要
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chap_1.html">1. 线性回归</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_1.html">1.1. 线性回归的基本形式</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.2. 线性回归的压缩估计</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_3.html">1.3. 稳健线性回归</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FChap_1_Sec_2.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Chap_1_Sec_2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>线性回归的压缩估计</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.2.1. 岭回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lasso">1.2.2. LASSO回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elastic-net">1.2.3. Elastic Net</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">,</span> <span class="n">ElasticNet</span><span class="p">,</span> <span class="n">lasso_path</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2023</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1><span class="section-number">1.2. </span>线性回归的压缩估计<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>上一部分介绍了线性回归模型的基本形式, 并在一个简单数据集上拟合了此线性模型, 发现它在训练集和测试集上的表现大致相当. 现在尝试一个更大的数据集: California房价数据集.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">caX</span><span class="p">,</span> <span class="n">cay</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span> <span class="o">=</span> <span class="n">caX</span><span class="p">[:</span><span class="mi">15000</span><span class="p">],</span> <span class="n">cay</span><span class="p">[:</span><span class="mi">15000</span><span class="p">]</span>
+<span class="n">caX_test</span><span class="p">,</span> <span class="n">cay_test</span> <span class="o">=</span> <span class="n">caX</span><span class="p">[</span><span class="mi">15000</span><span class="p">:],</span> <span class="n">cay</span><span class="p">[</span><span class="mi">15000</span><span class="p">:]</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of training set: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of testing set: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_test</span><span class="p">,</span> <span class="n">cay_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R2 of training set: 0.5936388868438899
+R2 of testing set: 0.5931322421964108
+</pre></div>
+</div>
+</div>
+</div>
+<p>在特征数量小且数据近似线性的情况下, 简单线性回归也能发挥较好的效果; 但如果特征数量很大而样本数量不足, 或者数据不是线性的情况下, 简单线性回归就可能会引入较大的样本外误差. 当线性回归模型的样本外误差较大时, 可以使用压缩估计来估计线性回归模型的参数. 常用的压缩估计有以下三种: 岭回归, Lasso和Elastic Net, 它们以不同的方式限制了线性回归中模型系数的大小, 从而牺牲一部分样本内解释能力, 来换取更大的样本外解释能力.</p>
+<p>具体而言, 三种压缩估计与简单线性回归一致, 对样本的预测仍然遵循</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{y}_i=w_0+X_iw,
+\]</div>
+<p>不同的是它们的优化目标有所不同. 根据之前的讨论, 简单线性回归希望最小化残差平方和, 即损失函数为</p>
+<div class="math notranslate nohighlight">
+\[
+J(w,w_0)=\sum_{i=1}^{n}(y_i-(w_0+X_iw))^2=\|Xw-y\|^2
+\]</div>
+<p>而压缩估计将估计量的系数也添加到损失函数中<a class="reference external" href="https://scikit-learn.org/stable/modules/linear_model.html">(1)</a>, 从而改变损失函数最小时 <span class="math notranslate nohighlight">\((w,w_0)\)</span> 的取值:</p>
+<div class="math notranslate nohighlight">
+\[
+J_\text{Ridge} = \|Xw-y\|^2+\alpha\|w\|^2_2,
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+J_\text{Lasso} = \frac{1}{2n_\text{samples}}\|Xw-y\|^2+\alpha\|w\|_1,
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+J_\text{ElasticNet} = \frac{1}{2n_\text{samples}}\|Xw-y\|^2+\alpha\rho\|w\|_1+\frac{\alpha(1-\rho)}{2}\|w\|_2^2.
+\]</div>
+<p>这里 <span class="math notranslate nohighlight">\(\|w\|_2^2=\sum w_i^2\)</span>, <span class="math notranslate nohighlight">\(\|w\|_1=\sum |w_i|\)</span>. 也就是说, 三种不同的压缩估计选择了三种损失函数, 以得到不同的估计值偏离. 另外, 损失函数中出现的 <span class="math notranslate nohighlight">\(\alpha&gt;0\)</span> 和 <span class="math notranslate nohighlight">\(\rho\in[0,1]\)</span> 都需要事先指定为某个常数, 在训练过程中不更新. 在sklearn中将这种量称为<strong>参数</strong>, 而统计学习中常称之为超参数, 这种名字上的差异注意即可, 我们均使用sklearn中的称呼.</p>
+<p>下面根据实例分别介绍三种压缩估计.</p>
+<section id="id2">
+<h2><span class="section-number">1.2.1. </span>岭回归<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>岭回归对回归系数 <span class="math notranslate nohighlight">\(w\)</span> 施加了 <span class="math notranslate nohighlight">\(L_2\)</span> 正则项, 即用参数平方和作为约束. 这样做的好处是损失函数仍是可微的, 能得到解析解, 不过这不在我们的讨论范围内.</p>
+<p>sklearn使用<code class="docutils literal notranslate"><span class="pre">Ridge</span></code>创建一个岭回归实例, 不同于简单线性回归, 参数 <span class="math notranslate nohighlight">\(\alpha\)</span> 需要在创建实例时就确认, 默认为 <span class="math notranslate nohighlight">\(1.0\)</span>. 另外, 岭回归有许多种求解方式, 可以通过<code class="docutils literal notranslate"><span class="pre">solver</span></code>指定, 并且每种求解方式还有个性化的参数, 这不是我们要讨论的重点, 如有兴趣可翻阅<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html">[3]</a>. 这里我们先创建一个岭回归模型, 并用训练数据拟合.</p>
+<p>可以用<code class="docutils literal notranslate"><span class="pre">get_params</span></code>方法查看sklearn模型的参数列表, 它返回一个包含模型参数的字典. 下面的信息给出了此模型所拥有的参数, 我们不关心后面的参数含义, 只需要了解<code class="docutils literal notranslate"><span class="pre">alpha</span></code>参数代表上面损失函数中的惩罚系数即可.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ridge</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ridge</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>alpha: 5.0.
+copy_X: True.
+fit_intercept: True.
+max_iter: None.
+normalize: deprecated.
+positive: False.
+random_state: None.
+solver: auto.
+tol: 0.001.
+</pre></div>
+</div>
+</div>
+</div>
+<p>下面用 <span class="math notranslate nohighlight">\(R^2\)</span> 评估岭回归在训练集和测试集上的解释能力. 注意, 任何压缩估计都不可能在训练集上有高过简单线性回归的 <span class="math notranslate nohighlight">\(R^2\)</span>, 这是其性质决定的.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>这里, 岭回归的表现没有简单线性回归好, 这是正常的, 因为简单线性回归没有表现出过拟合, 不需要使用压缩估计.</p>
+</div>
+</aside>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of training set(ridge): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ridge</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of testing set(ridge): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ridge</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_test</span><span class="p">,</span> <span class="n">cay_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R2 of training set(ridge): 0.5936376967588064
+R2 of testing set(ridge): 0.5929825029783832
+</pre></div>
+</div>
+</div>
+</div>
+<p>岭回归模型的关键在参数<code class="docutils literal notranslate"><span class="pre">alpha</span></code>, 但最优<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值是事先不知道的. 常用的方法是拟定一系列<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值, 选择其中表现最好的模型, 即使用网格搜索. 在事先不知道最优<code class="docutils literal notranslate"><span class="pre">alpha</span></code>的情况下, 一般根据量级设置不同<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值. 除了用下面的方法进行人工搜索外, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html"><code class="docutils literal notranslate"><span class="pre">RidgeCV</span></code>类</a>也给出了自动搜索最优<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值的方法, 它不仅比人工实现更方便, 还有更高的运行效率.</p>
+<p>下图也说明了本例中, 不使用压缩估计会是更好的选择.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alphas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">]</span>
+<span class="n">oosR2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">:</span>
+    <span class="n">temp_reg</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)</span>
+    <span class="n">oosR2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_reg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_test</span><span class="p">,</span> <span class="n">cay_test</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">oosR2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;out-of-sample R2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;alpha-R2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6475bdcef39387ce8a979c45c5e0fc794cf6b6c0769640e729ab069e55cabaeb.png" src="_images/6475bdcef39387ce8a979c45c5e0fc794cf6b6c0769640e729ab069e55cabaeb.png" />
+</div>
+</div>
+</section>
+<section id="lasso">
+<h2><span class="section-number">1.2.2. </span>LASSO回归<a class="headerlink" href="#lasso" title="Permalink to this headline">#</a></h2>
+<p>Lasso对回归系数施加了 <span class="math notranslate nohighlight">\(L_1\)</span> 正则项, 这样虽然使得损失函数不可微, 但却使模型倾向于保留稀疏解, 相当于模型自动进行特征选择. sklearn用<code class="docutils literal notranslate"><span class="pre">Lasso</span></code>类创建实例, 其参数与<code class="docutils literal notranslate"><span class="pre">Ridge</span></code>类似. 同样地, 我们可以用搜索或者<code class="docutils literal notranslate"><span class="pre">LassoCV</span></code>来找到最佳超参数, 下面的结果表明依然不需要正则化.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alphas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">]</span>
+<span class="n">oosR2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">:</span>
+    <span class="n">temp_reg</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">)</span>
+    <span class="n">oosR2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_reg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">caX_test</span><span class="p">,</span> <span class="n">cay_test</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">oosR2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;out-of-sample R2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;alpha-R2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e4983c887a3619d72416ba42a8cad4ad5ab0c047bab484a7dae1fc3832142d3c.png" src="_images/e4983c887a3619d72416ba42a8cad4ad5ab0c047bab484a7dae1fc3832142d3c.png" />
+</div>
+</div>
+<p>不过, Lasso的特征筛选能力在面临大量特征时很有用. 使用<code class="docutils literal notranslate"><span class="pre">lasso_path()</span></code>函数可以生成系数随着<code class="docutils literal notranslate"><span class="pre">alpha</span></code>变化的路径, 观察变量是如何被筛选的. 它除了接受待拟合的数据外, 还接收一系列<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值, 可以通过以下参数传入系列<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">eps</span></code>: 自动选择<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值, 其中<code class="docutils literal notranslate"><span class="pre">eps</span> <span class="pre">=</span> <span class="pre">alpha_min</span> <span class="pre">/</span> <span class="pre">alpha_max</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_alphas</span></code>: 整数, 指定要尝试的<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值的数量.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alphas</span></code>: 直接指定<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值列表.</p></li>
+</ul>
+<p>然后, <code class="docutils literal notranslate"><span class="pre">lasso_path</span></code>会返回</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">alphas</span></code>: 函数尝试的<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值列表, 是形状为<code class="docutils literal notranslate"><span class="pre">(n_alphas,)</span></code>的数组.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coefs</span></code>: 每个<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值对应的属性系数, 形状为<code class="docutils literal notranslate"><span class="pre">(n_features,</span> <span class="pre">n_alphas)</span></code>, 即每一行代表一个特征的系数路径.</p></li>
+</ul>
+<p>还有其他的返回值, 但并不是我们所关心的, 如果要绘制系数路径, 只需使用</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">alphas</span><span class="p">,</span> <span class="n">coefs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lasso_paths</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>下图表示, 随着<code class="docutils literal notranslate"><span class="pre">alpha</span></code>值的增大, 模型系数逐渐衰减到 <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
+<span class="n">alphas</span><span class="p">,</span> <span class="n">coefs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lasso_path</span><span class="p">(</span><span class="n">caX_train</span><span class="p">,</span> <span class="n">cay_train</span><span class="p">,</span> <span class="n">alphas</span><span class="o">=</span><span class="n">alphas</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;C</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">coefs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">coefs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;feature[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;coef&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;lasso path&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/82a1b36cc33f3d0e417c6243e6393a53d7f43871d1f9d9eb6164b77044e956ec.png" src="_images/82a1b36cc33f3d0e417c6243e6393a53d7f43871d1f9d9eb6164b77044e956ec.png" />
+</div>
+</div>
+</section>
+<section id="elastic-net">
+<h2><span class="section-number">1.2.3. </span>Elastic Net<a class="headerlink" href="#elastic-net" title="Permalink to this headline">#</a></h2>
+<p>介绍完岭回归和Lasso, Elastic Net就不必多加赘述, 实际上它的损失函数是 <span class="math notranslate nohighlight">\(L_1\)</span> 损失和 <span class="math notranslate nohighlight">\(L_2\)</span> 损失的加权. 使用<code class="docutils literal notranslate"><span class="pre">ElasticNet</span></code>类创建实例, 分别用<code class="docutils literal notranslate"><span class="pre">alpha</span></code>和<code class="docutils literal notranslate"><span class="pre">l1_ratio</span></code>参数控制 <span class="math notranslate nohighlight">\(\alpha\)</span> 和 <span class="math notranslate nohighlight">\(\rho\)</span> 的大小, 再拟合数据, 就得到了Elastic Net模型. 对最优超参数的选择, 依然可以使用<code class="docutils literal notranslate"><span class="pre">ElasticNetCV</span></code>进行网格化搜索.</p>
+<p>由于Elastic Net的损失函数中也包含 <span class="math notranslate nohighlight">\(L_1\)</span> 正则, 因此可以用于特征筛选, 类似地<code class="docutils literal notranslate"><span class="pre">enet_path()</span></code>函数也提供了类似于<code class="docutils literal notranslate"><span class="pre">lasso_path()</span></code>的功能, 绘制模型系数随正则化参数变化的图, 不过在这一过程中, <code class="docutils literal notranslate"><span class="pre">l1_ratio</span></code>是不变的.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chap_1_Sec_1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1.1. </span>线性回归的基本形式</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Chap_1_Sec_3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.3. </span>稳健线性回归</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.2.1. 岭回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lasso">1.2.2. LASSO回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elastic-net">1.2.3. Elastic Net</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Hao Jiang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

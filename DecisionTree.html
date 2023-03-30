@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>决策树 &#8212; Sklearn Example</title>
+    <title>1. 决策树 &#8212; Sklearn Example</title>
   
   
   
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'DecisionTree';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Scikit-learn Examples" href="intro.html" />
+    <link rel="prev" title="从零开始的sklearn学习纲要" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -152,12 +152,12 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    Scikit-learn Examples
+                    从零开始的sklearn学习纲要
                 </a>
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">决策树</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. 决策树</a></li>
 </ul>
 
     </div>
@@ -351,11 +351,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">决策树回归</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">树的可视化</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">剪枝</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">后剪枝</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">前剪枝</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.1. 决策树回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">1.2. 树的可视化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">1.3. 剪枝</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">1.3.1. 后剪枝</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">1.3.2. 前剪枝</a></li>
 </ul>
 </li>
 </ul>
@@ -370,7 +370,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="id1">
-<h1>决策树<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">1. </span>决策树<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
 <p>本文是从scikit-learn官网中, 介绍决策树的相关文档整合而来.</p>
 <p>Reference:</p>
 <ul class="simple">
@@ -395,7 +395,7 @@ document.write(`
 </div>
 </div>
 <section id="id2">
-<h2>决策树回归<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">1.1. </span>决策树回归<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
 <p>决策树最初为分类模型而设计, 但是它也可以用于回归. 用于回归任务时, 每一个叶子节点上取一样的值, 这决定了决策树回归得到的是分段线性函数.</p>
 <p>下面以单变量回归问题为例, 简要说明决策树回归的过程. 先如图所示, 生成数据</p>
 <div class="math notranslate nohighlight">
@@ -416,7 +416,7 @@ y = \sin(x) + \sin(\frac{10x}{3})+\varepsilon.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x19c25824640&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x1779a385790&gt;
 </pre></div>
 </div>
 <img alt="_images/ae7c7174e43be324a5511f986c7bf9655aaaf776189215a87a67ffa44006d459.png" src="_images/ae7c7174e43be324a5511f986c7bf9655aaaf776189215a87a67ffa44006d459.png" />
@@ -472,7 +472,7 @@ y = \sin(x) + \sin(\frac{10x}{3})+\varepsilon.
 </div>
 </section>
 <section id="id3">
-<h2>树的可视化<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">1.2. </span>树的可视化<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
 <p>先创建一个异或分类数据集.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -680,9 +680,9 @@ Misclassification Rate: 0.445.
 </div>
 </section>
 <section id="id4">
-<h2>剪枝<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">1.3. </span>剪枝<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
 <section id="id5">
-<h3>后剪枝<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<h3><span class="section-number">1.3.1. </span>后剪枝<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
 <p>对决策树 <span class="math notranslate nohighlight">\(T\)</span>, 定义其总误分率为 <span class="math notranslate nohighlight">\(R(T)\)</span>, 那么决定是否剪枝的成本复杂度度量 <span class="math notranslate nohighlight">\(R_\alpha(T)\)</span> 定义为</p>
 <div class="math notranslate nohighlight">
 \[
@@ -734,7 +734,7 @@ R_\alpha(T_t) = R_\alpha(t) \implies \alpha = \frac{R(t)-R(T_t)}{|\tilde{T}_t|-1
 </div>
 </section>
 <section id="id6">
-<h3>前剪枝<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<h3><span class="section-number">1.3.2. </span>前剪枝<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
 <p>后剪枝是对树完全生长后进行剪枝, 也可以选择在树的生长过程中进行剪枝, 即前剪枝.</p>
 <p>在决策树中, <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>, <code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>, <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>可用于控制前剪枝, 它们的作用分别如下:</p>
 <ul>
@@ -788,7 +788,7 @@ R_\alpha(T_t) = R_\alpha(t) \implies \alpha = \frac{R(t)-R(T_t)}{|\tilde{T}_t|-1
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Scikit-learn Examples</p>
+        <p class="prev-next-title">从零开始的sklearn学习纲要</p>
       </div>
     </a>
 </div>
@@ -806,11 +806,11 @@ R_\alpha(T_t) = R_\alpha(t) \implies \alpha = \frac{R(t)-R(T_t)}{|\tilde{T}_t|-1
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">决策树回归</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">树的可视化</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">剪枝</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">后剪枝</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">前剪枝</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.1. 决策树回归</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">1.2. 树的可视化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">1.3. 剪枝</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">1.3.1. 后剪枝</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">1.3.2. 前剪枝</a></li>
 </ul>
 </li>
 </ul>

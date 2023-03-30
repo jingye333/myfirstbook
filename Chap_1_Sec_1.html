@@ -1,0 +1,629 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.1. 线性回归的基本形式 &#8212; Sklearn Example</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Chap_1_Sec_1';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.2. 线性回归的压缩估计" href="Chap_1_Sec_2.html" />
+    <link rel="prev" title="1. 线性回归" href="Chap_1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    从零开始的sklearn学习纲要
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chap_1.html">1. 线性回归</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.1. 线性回归的基本形式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_2.html">1.2. 线性回归的压缩估计</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Chap_1_Sec_3.html">1.3. 稳健线性回归</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FChap_1_Sec_1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Chap_1_Sec_1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>线性回归的基本形式</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2023</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1><span class="section-number">1.1. </span>线性回归的基本形式<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>大部分机器学习算法可以分为两大类: 有监督学习与无监督学习. 对于一批样本数据 <span class="math notranslate nohighlight">\(\{X_i\}_{i=1}^{n}\)</span>, 其中每一个 <span class="math notranslate nohighlight">\(X_i\)</span> 是一个 <span class="math notranslate nohighlight">\(m\)</span> 维向量, 用一个数据矩阵 <span class="math notranslate nohighlight">\(X\in\mathbb{R}^{n\times m}\)</span> 来表示样本数据. <strong>有监督学习</strong>指的是每一个样本数据 <span class="math notranslate nohighlight">\(X_i\)</span> 对应一个标签 <span class="math notranslate nohighlight">\(y_i\)</span>, 通常在实际生活中, 希望用观察到的 <span class="math notranslate nohighlight">\(X_i\)</span> 预测未观察到的 <span class="math notranslate nohighlight">\(y_i\)</span>, 因此算法希望从一系列有标签数据中学到一个能够尽可能预测标签的范式 <span class="math notranslate nohighlight">\(h(X_i)=y_i\)</span>; <strong>无监督学习</strong>指的是样本数据没有标签, 希望根据样本数据的某些特征来达成一定的目标.</p>
+<p>在有监督学习问题中, 根据标签 <span class="math notranslate nohighlight">\(y_i\)</span> 类型的不同, 又可以分为分类和回归两类: 分类指 <span class="math notranslate nohighlight">\(y_i\)</span> 只取离散值的情况, 对应着样本所属的类别; 回归指 <span class="math notranslate nohighlight">\(y_i\)</span> 可以在一个连续的范围内取值. 在线性回归中, 我们就需要根据看到的样本特征 <span class="math notranslate nohighlight">\(X_i\)</span> 预测其标签 <span class="math notranslate nohighlight">\(\hat{y}_i\)</span>, 并希望预测值 <span class="math notranslate nohighlight">\(\hat{y}_i\)</span> 尽可能地接近真实值 <span class="math notranslate nohighlight">\(y_i\)</span>.</p>
+<p>任何学习算法都依赖于一定的假设, 而线性回归所依赖的假设形式十分简单: 它假设标签是特征的线性函数, 即</p>
+<div class="math notranslate nohighlight">
+\[
+y_i = w_0 + w_1X_{i1} + w_2X_{i2} + \cdots + w_mX_{im}=w_0+Xw,\quad w=(w_1,\cdots,w_n)^T\in\mathbb{R}^{n}.
+\]</div>
+<p>我们称一个能根据输入给出一定结果的函数为估计器. 线性回归是一个十分简单的估计器, 它的所有信息由参数 <span class="math notranslate nohighlight">\(w_0\)</span> 和 <span class="math notranslate nohighlight">\(w\)</span> 所定义, 确定了这两个值, 线性回归模型就是确定的. 至于如何根据给定的训练数据确定模型参数, 线性回归使用简单最小二乘法(OLS), 即希望预测结果与真实结果之间的残差平方和最小:</p>
+<div class="math notranslate nohighlight">
+\[
+(w_0,w)=\arg\min_{w_0,w}\sum_{i=1}^{n}\left(y_i-(w_0+X_iw) \right)^2.
+\]</div>
+<p>在sklearn中, 由<code class="docutils literal notranslate"><span class="pre">linear_model,LinearRegression</span></code>类可以创建一个线性回归实例, 用它来完成我们所需要的一切工作. 接下来我们结合数据集讨论, 使用sklearn中内置的<code class="docutils literal notranslate"><span class="pre">diabetes</span></code>数据集, 首先加载数据进行预览. <code class="docutils literal notranslate"><span class="pre">diabetes</span></code>是一个简单的回归数据集, 它包含了一共442个样本, 一共10个特征.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># help(load_diabetes)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X.shape: &#39;</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;y.shape: &#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>X.shape:  (442, 10)
+y.shape:  (442,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>由于模型的训练会学到给定数据中内置的知识, 为了测试模型推广到未知的数据中是否还有足够好的标准, 我们一般会留下数据中的一部分不参与训练, 而是用来检测模型的效果. 将用于模型训练的数据称为<strong>训练集</strong>, 将用于检测模型效果的数据称为<strong>测试集</strong>, 它们的比例没有明确要求, 一般随机抽取以保证两个数据集中的特征与标签分布大致相同. 几乎任何模型训练都需要测试集来评估模型的效果, 不能让模型只对见过的数据有好的表现.</p>
+<p>当然, 在拆分训练集和测试集的过程中, 要保证每一个样本的特征和标签是匹配的.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">300</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">300</span><span class="p">:]</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">300</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">300</span><span class="p">:]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(300, 10) (300,)
+(142, 10) (142,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>现在, 获得了训练集和测试集后, 我们应当围绕下面的步骤来搭建一个回归模型. 注意, 下面的步骤几乎适用于任何有监督学习模型.</p>
+<ul class="simple">
+<li><p>创建一个模型实例. 模型实例中包含了模型的基本信息, 这些信息在还未见到数据时就要确定.</p></li>
+<li><p>根据数据拟合模型. 这一步从数据中学习知识, 得到一个可用模型, 学习的过程由模型实例所决定.</p></li>
+<li><p>用拟合的模型预测训练集, 观察模型在训练集上的结果.</p></li>
+<li><p>用拟合的模型预测测试集, 观察模型在测试集上的结果并对比.</p></li>
+</ul>
+<p>第一步, 用<code class="docutils literal notranslate"><span class="pre">LinearRegression()</span></code>创建一个模型实例. 有很多模型会在创建实例时就指定好一系列需指定的参数, 而简单线性回归模型需要预先指定的参数不多, 一般情况下不需要传入任何参数, 只有在对模型有具体要求, 比如不需要常数截距, 或者需要系数全部非负时, 才会调整简单线性回归的参数.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>接下来, 用数据拟合模型. 在线性回归模型中, 创建的实例有<code class="docutils literal notranslate"><span class="pre">.fit()</span></code>方法, 它接受数据(特征和标签)拟合模型, 这里只传入训练数据. 需注意, 模型拟合不是inplace的, 它不会直接改变创建的实例, 因此要用一个变量来接受拟合后的模型.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>拟合过程是自动的, 这意味着我们不需要考虑模型会如何运用最小二乘法找到最优的参数. 拟合完毕后, 可以通过模型属性查看模型的具体信息. 在sklearn中, <strong>属性</strong>指的是一系列<strong>以下划线结束的类属性</strong>, 它允许我们了解模型的内部构造. 对简单线性回归而言, 可以查看以下属性<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html">(1)</a>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">coef_</span></code>: 系数, 即上述公式中的 <span class="math notranslate nohighlight">\(w\)</span>, 是一个<code class="docutils literal notranslate"><span class="pre">(n_features,)</span></code>的向量.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">intercept_</span></code>: 截距, 即上述公式中的 <span class="math notranslate nohighlight">\(w_0\)</span>, 是一个数.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank_</span></code>: 矩阵<code class="docutils literal notranslate"><span class="pre">X</span></code>的秩.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">singular_</span></code>: 矩阵<code class="docutils literal notranslate"><span class="pre">X</span></code>的奇异值.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_features_in_</span></code>: 训练过程中看到的特征数.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_names_in_</span></code>: 训练过程中看到的特征名, 是一个<code class="docutils literal notranslate"><span class="pre">(n_features_in)</span></code>的字符串列表.</p></li>
+</ul>
+<p>在线性回归模型中, 我们只关心模型的形式, 即我们如何根据特征得到预测值, 因此只需查看<code class="docutils literal notranslate"><span class="pre">coef_</span></code>和<code class="docutils literal notranslate"><span class="pre">intercept_</span></code>即可.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coef of linear regression: &#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intercept of linear regression: &#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>coef of linear regression:  [ -16.576 -254.665  560.986  278.918 -393.414   97.055  -19.002  169.465  632.951  114.216]
+intercept of linear regression:  152.34786451820108
+</pre></div>
+</div>
+</div>
+</div>
+<p>虽然我们能够获得模型参数, 从而得到模型的具体形式, 但自己写一个矩阵乘法来计算结果显然是很繁琐的. 所幸, 拟合后的模型提供了一系列方法, 帮助我们很方便地应用模型. 在<code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code>中, 调用<code class="docutils literal notranslate"><span class="pre">fit</span></code>方法后, 模型的下述方法将可以使用:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">predict</span></code>: 传入特征矩阵, 输出此特征矩阵对应的预测值.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score</span></code>: 传入特征矩阵及其对应的真实标签值, 返回模型在这组数据上的得分.</p></li>
+</ul>
+<p>在简单线性回归中, 调用<code class="docutils literal notranslate"><span class="pre">predict</span></code>方法相当于自动执行了一遍 <span class="math notranslate nohighlight">\(\hat{y}_i=X_iw+w_0\)</span>, 从而省去了繁琐的乘法和加法步骤; 而调用<code class="docutils literal notranslate"><span class="pre">score</span></code>方法则是计算模型预测这组数据的 <span class="math notranslate nohighlight">\(R^2\)</span>: <span class="math notranslate nohighlight">\(R^2\)</span> 是一个用于评估回归模型解释能力的指标, 其计算方式为</p>
+<div class="math notranslate nohighlight">
+\[
+R^2=1-\frac{\sum(y_i-\hat{y}_i)^2}{\sum(y_i-\bar y)^2}.
+\]</div>
+<p><span class="math notranslate nohighlight">\(R^2\)</span>值越大, 代表模型的解释能力越强. 如取到最大值 <span class="math notranslate nohighlight">\(1\)</span>, 则说明预测值完全和真实值吻合导致被减数为 <span class="math notranslate nohighlight">\(0\)</span>; <span class="math notranslate nohighlight">\(R^2\)</span> 也可以是负数, 这代表模型的预测能力甚至不如简单地用标签平均值预测.</p>
+<p>下面我们用拟合得到的模型预测第一个数据点, 以及评估在训练集和测试集上的解释能力.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The prediction and true value of the first sample.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pred: </span><span class="si">{}</span><span class="s1">, true: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R2 of training data: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R2 of testing data: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The prediction and true value of the first sample.
+pred: [204.511], true: 151.0
+R2 of training data: 0.5147187604205686
+R2 of testing data: 0.5071991852187347
+</pre></div>
+</div>
+</div>
+</div>
+<p>可以发现, 此回归模型的解释能力大约为 <span class="math notranslate nohighlight">\(0.5\)</span>, 并且在训练集上的解释能力略高于测试集上. 一般模型在训练集上的表现要优于测试集, 因为模型倾向于过度学习训练集上的信息, 以期在训练集上获得尽可能好的表现, 但这往往以损失在真实分布上的表现为代价. 由于线性回归模型形式十分简单, 它过度学习的程度很轻, 因此在训练集上的表现仅是略高于测试集上; 而对于复杂的数据集, 或者变量较多的情况下, 如果不加以控制, 训练集上的表现可能要比测试集上好的多, 这种现象被称为<strong>过拟合</strong>.</p>
+<p>下面, 我们将所有执行过的步骤合在一起, 给出用sklearn搭建模型的一般框架.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">300</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">300</span><span class="p">]</span>
+<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">300</span><span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">300</span><span class="p">:]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of training set: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R2 of testing set: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R2 of training set: 0.5147187604205686
+R2 of testing set: 0.5071991852187347
+</pre></div>
+</div>
+</div>
+</div>
+<p>使用sklearn搭建模型整体步骤就是这么简单, 简单得让人有些无从下手修改. 实际上, sklearn不只提供了这种高度简明的模型搭建过程, 其中的许多步骤是允许个性化的. 在日后的学习中, 我们会更多地介绍sklearn的其他功能.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chap_1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>线性回归</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Chap_1_Sec_2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.2. </span>线性回归的压缩估计</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Hao Jiang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
